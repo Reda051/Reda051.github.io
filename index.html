@@ -386,7 +386,7 @@
 <p><strong>可是真理就是没真理，那谁会听，那谁想听。</strong></p>
 <p><strong>对于无病呻吟的自己，除了懒，我找不到更合适的词语来形容。</strong></p>
 <p><strong>无法用行动将想法实现，总是痴人说梦，有雄心壮志却仍然在躲避。</strong></p>
-<p><strong>从现在开锁，我不会“只用30%的力”了。</strong></p>
+<p><strong>从现在开始，我不会“只用30%的力”了。</strong></p>
 <p><strong>我的语言表达能力很差，可我才刚开始，一切会好的。</strong></p>
 <p><strong>开创自己的博客，一是想记录自己的成长，二是想督促自己学习，三是与大家共勉。</strong></p>
 <p><strong>这是一个新的开始。</strong></p>
@@ -567,5 +567,37 @@
 
 
 
+<div id="musicMouseDrag" style="position:fixed; z-index: 9999; bottom: 0; right: 0;"></div>
+    <div id="musicDragArea" style="position: absolute; top: 0; left: 0; width: 100%;height: 10px;cursor: move; z-index: 10;"></div>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=477251491&auto=1&height=66"></iframe>
+</div>
+<!--以下代码是为了支持随时拖动音乐控件的位置，如没有需求，可去掉下面代码-->
+<script>
+    var $DOC = $(document)
+    $('#musicMouseDrag').on('mousedown', function (e) {
+      // 阻止文本选中
+      $DOC.bind("selectstart", function () {
+        return false;
+      });
+      $('#musicDragArea').css('height', '100%');
+      var $moveTarget = $('#musicMouseDrag');
+      $moveTarget.css('border', '1px dashed grey')
+      var div_x = e.pageX - $moveTarget.offset().left;
+      var div_y = e.pageY - $moveTarget.offset().top;
+      $DOC.on('mousemove', function (e) {
+        var targetX = e.pageX - div_x;
+        var targetY = e.pageY - div_y;
+        targetX = targetX < 0 ? 0 : (targetX + $moveTarget.outerWidth() >= window.innerWidth) ? window.innerWidth - $moveTarget.outerWidth() : targetX;
+        targetY = targetY < 0 ? 0 : (targetY + $moveTarget.outerHeight() >= window.innerHeight) ? window.innerHeight - $moveTarget.outerHeight() : targetY;
+        $moveTarget.css({'left': targetX + 'px', 'top': targetY + 'px', 'bottom': 'inherit', 'right': 'inherit'})
+      }).on('mouseup', function () {
+        $DOC.unbind("selectstart");
+        $DOC.off('mousemove')
+        $DOC.off('mouseup')
+        $moveTarget.css('border', 'none')
+        $('#musicDragArea').css('height', '10px');
+      })
+    })
+</script>
 
 </html>
